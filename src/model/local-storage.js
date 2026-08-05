@@ -1,5 +1,14 @@
+import { AuthModel } from './auth.js'
+
+const TASKS_KEY = 'tasks'
+
+function tasksKey() {
+  const userId = AuthModel.getCurrentUserId()
+  return userId ? `${TASKS_KEY}:${userId}` : TASKS_KEY
+}
+
 export class TaskModel {
-  static create ({ task }) {
+  static create({ task }) {
     const newTask = {
       ...task,
       id: crypto.randomUUID()
@@ -7,8 +16,9 @@ export class TaskModel {
     TaskModel.saveTask({ task: newTask })
   }
 
-  static getAll () {
-    const tasksStorage = window.localStorage.getItem('tasks')
+  static getAll() {
+    const tasksStorage = window.localStorage.getItem(tasksKey())
+    const tasksStorage = window.localStorage.getItem(tasksKey())
     try {
       return tasksStorage ? JSON.parse(tasksStorage) : []
     } catch (error) {
@@ -17,36 +27,38 @@ export class TaskModel {
     }
   }
 
-  static saveTask ({ task }) {
+  static saveTask({ task }) {
     const tasks = TaskModel.getAll()
     tasks.push(task)
 
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
-  static star ({ id }) {
+  static star({ id }) {
     const task = TaskModel.get({ id })
     task.starred = !task.starred
 
     TaskModel.update({ id, updatedTask: task })
   }
 
-  static markCompleted ({ id }) {
+  static markCompleted({ id }) {
     const task = TaskModel.get({ id })
     task.completed = !task.completed
 
     TaskModel.update({ id, updatedTask: task })
   }
 
-  static delete ({ id }) {
+  static delete({ id }) {
     const tasks = TaskModel.getAll()
     const index = tasks.findIndex(task => task.id === id)
     tasks.splice(index, 1)
 
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
-  static update ({ id, updatedTask }) {
+  static update({ id, updatedTask }) {
     const tasks = TaskModel.getAll()
     const index = tasks.findIndex(task => task.id === id)
 
@@ -55,16 +67,17 @@ export class TaskModel {
       ...updatedTask
     }
 
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
-  static get ({ id }) {
+  static get({ id }) {
     const tasks = TaskModel.getAll()
     const task = tasks.filter(task => task.id === id)
     return task[0]
   }
 
-  static getFilteredTasks ({ filter }) {
+  static getFilteredTasks({ filter }) {
     const filters = ['all', 'completed', 'starred', 'pending']
     if (!filters.includes(filter)) throw new Error(`'${filter}' is not a valid filter.`)
 
