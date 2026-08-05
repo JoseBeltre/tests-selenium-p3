@@ -1,0 +1,10 @@
+# Normalizar fines de linea: LF en el repo, sin importar el SO del desarrollador.
+* text=auto eol=lf
+
+# Binarios: git no debe tocarlos.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.webp binary
