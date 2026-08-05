@@ -1,3 +1,17 @@
+import { AuthModel } from './auth.js'
+
+const TASKS_KEY = 'tasks'
+
+/**
+ * Cada usuario guarda sus tareas bajo su propia llave (`tasks:<userId>`), así
+ * dos cuentas en el mismo navegador no se pisan. Sin sesión activa caemos a la
+ * llave suelta, que es la que usaba la app antes de existir el login.
+ */
+function tasksKey () {
+  const userId = AuthModel.getCurrentUserId()
+  return userId ? `${TASKS_KEY}:${userId}` : TASKS_KEY
+}
+
 export class TaskModel {
   static create ({ task }) {
     const newTask = {
@@ -8,7 +22,7 @@ export class TaskModel {
   }
 
   static getAll () {
-    const tasksStorage = window.localStorage.getItem('tasks')
+    const tasksStorage = window.localStorage.getItem(tasksKey())
     try {
       return tasksStorage ? JSON.parse(tasksStorage) : []
     } catch (error) {
@@ -21,7 +35,7 @@ export class TaskModel {
     const tasks = TaskModel.getAll()
     tasks.push(task)
 
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
   static star ({ id }) {
@@ -43,7 +57,7 @@ export class TaskModel {
     const index = tasks.findIndex(task => task.id === id)
     tasks.splice(index, 1)
 
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
   static update ({ id, updatedTask }) {
@@ -55,7 +69,7 @@ export class TaskModel {
       ...updatedTask
     }
 
-    window.localStorage.setItem('tasks', JSON.stringify(tasks))
+    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
   static get ({ id }) {
