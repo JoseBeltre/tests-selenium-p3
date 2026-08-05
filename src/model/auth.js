@@ -2,7 +2,7 @@ const USERS_KEY = 'users'
 const SESSION_KEY = 'session'
 const LEGACY_TASKS_KEY = 'tasks'
 
-async function hashPassword ({ password, salt }) {
+async function hashPassword({ password, salt }) {
   const data = `${salt}:${password}`
 
   if (window.crypto?.subtle) {
@@ -20,12 +20,12 @@ async function hashPassword ({ password, salt }) {
   return `insecure-${(hash >>> 0).toString(16)}`
 }
 
-function toPublicUser (user) {
+function toPublicUser(user) {
   const { id, name, email, createdAt } = user
   return { id, name, email, createdAt }
 }
 
-function migrateLegacyTasks ({ userId }) {
+function migrateLegacyTasks({ userId }) {
   const legacyTasks = window.localStorage.getItem(LEGACY_TASKS_KEY)
   if (!legacyTasks) return
 
@@ -34,7 +34,7 @@ function migrateLegacyTasks ({ userId }) {
 }
 
 export class AuthModel {
-  static getUsers () {
+  static getUsers() {
     const usersStorage = window.localStorage.getItem(USERS_KEY)
     try {
       return usersStorage ? JSON.parse(usersStorage) : []
@@ -44,12 +44,12 @@ export class AuthModel {
     }
   }
 
-  static findByEmail ({ email }) {
+  static findByEmail({ email }) {
     const normalizedEmail = email.trim().toLowerCase()
     return AuthModel.getUsers().find(user => user.email === normalizedEmail)
   }
 
-  static async register ({ name, email, password }) {
+  static async register({ name, email, password }) {
     const normalizedEmail = email.trim().toLowerCase()
 
     if (AuthModel.findByEmail({ email: normalizedEmail })) {
@@ -77,7 +77,7 @@ export class AuthModel {
     return { success: true, user: toPublicUser(newUser) }
   }
 
-  static async login ({ email, password }) {
+  static async login({ email, password }) {
     const invalidCredentials = { success: false, message: 'Correo o contraseña incorrectos.' }
 
     const user = AuthModel.findByEmail({ email })
@@ -90,15 +90,15 @@ export class AuthModel {
     return { success: true, user: toPublicUser(user) }
   }
 
-  static startSession ({ userId }) {
+  static startSession({ userId }) {
     window.localStorage.setItem(SESSION_KEY, JSON.stringify({ userId }))
   }
 
-  static logout () {
+  static logout() {
     window.localStorage.removeItem(SESSION_KEY)
   }
 
-  static getCurrentUser () {
+  static getCurrentUser() {
     const sessionStorage = window.localStorage.getItem(SESSION_KEY)
     if (!sessionStorage) return null
 
@@ -112,7 +112,7 @@ export class AuthModel {
     }
   }
 
-  static getCurrentUserId () {
+  static getCurrentUserId() {
     return AuthModel.getCurrentUser()?.id
   }
 }
