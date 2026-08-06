@@ -4,6 +4,7 @@ const {
   crearTarea,
   buscarTarea,
   escribirEnCampo,
+  existeElemento,
   titulosDeTareas,
   tareasGuardadas,
   capturar,
@@ -52,5 +53,21 @@ describe('HU-04 Actualizar tarea', function () {
 
     const guardadas = await tareasGuardadas(driver);
     expect(guardadas[0].title).toBe('Titulo editado');
+  });
+
+  it('Prueba negativa: no se permite guardar una edicion con el titulo vacio', async function () {
+    await entrarAutenticado(driver);
+    await crearTarea(driver, 'Tarea sin cambios');
+
+    await abrirEdicion('Tarea sin cambios');
+    await escribirEnCampo(driver, 'title', '');
+    await driver.findElement(By.id('task-submit-btn')).click();
+
+    const error = await driver.wait(until.elementLocated(By.id('task-error-msg')), ESPERA);
+    expect(await error.isDisplayed()).toBe(true);
+    expect(await existeElemento(driver, By.id('title'))).toBe(true);
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas[0].title).toBe('Tarea sin cambios');
   });
 });
