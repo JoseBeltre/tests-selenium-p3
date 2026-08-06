@@ -13,11 +13,8 @@ import Website from './Components/svg/Website'
 import { SearchBar } from './Components/SearchBar'
 import { AuthScreen } from './Components/AuthScreen'
 import { AuthModel } from './model/auth'
-import { AuthScreen } from './Components/AuthScreen'
-import { AuthModel } from './model/auth'
 
 function App () {
-  const [user, setUser] = useState(() => AuthModel.getCurrentUser())
   const [user, setUser] = useState(() => AuthModel.getCurrentUser())
   const [isNewTasksModalOpen, setIsNewTasksModalOpen] = useState(false)
   const [isDeleteTasksModalOpen, setIsDeleteTasksModalOpen] = useState(false)
@@ -87,40 +84,15 @@ function App () {
     return <AuthScreen onAuthenticated={setUser} />
   }
 
-  const logout = () => {
-    AuthModel.logout()
-    setUser(null)
-    setSearchQuery('')
-    setFilter(filterOptions[0])
-  }
-
-  if (!user) {
-    return <AuthScreen onAuthenticated={setUser} />
-  }
-
   return (
     <>
-      <header className='p-1 border-b mb-5 flex justify-between items-center gap-3 2xl:mt-10'>
       <header className='p-1 border-b mb-5 flex justify-between items-center gap-3 2xl:mt-10'>
         <h1 className='text-4xl font-bold'>Lista de Tareas</h1>
 
         <div className='flex items-center gap-3'>
           <span className='hidden sm:inline text-white/50'>Hola, {user.name}</span>
 
-        <div className='flex items-center gap-3'>
-          <span className='hidden sm:inline text-white/50'>Hola, {user.name}</span>
-
           <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='hidden lg:flex' />
-          <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='hidden lg:flex' />
-
-          <button
-            name='logout'
-            onClick={logout}
-            className='bg-itemBg p-2 px-4 w-fit text-white/60 hover:bg-itemBgHover hover:text-white transition-colors'
-          >
-            Salir
-          </button>
-        </div>
 
           <button
             name='logout'
