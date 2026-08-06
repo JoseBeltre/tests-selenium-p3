@@ -2,6 +2,7 @@ const { Builder, By, until } = require('selenium-webdriver');
 const {
   entrarAutenticado,
   crearTarea,
+  buscarTarea,
   contarTareas,
   titulosDeTareas,
   capturar,
@@ -38,5 +39,22 @@ describe('HU-03 Listar tareas', function () {
     expect(titulos).toContain('Lavar los platos');
     expect(titulos).toContain('Sacar la basura');
     expect(titulos).toContain('Estudiar para el examen');
+  });
+
+  it('Camino feliz: cada tarea se muestra con su estado correcto al recargar la vista', async function () {
+    await entrarAutenticado(driver);
+    await crearTarea(driver, 'Tarea pendiente');
+    await crearTarea(driver, 'Tarea completada');
+
+    const completada = await buscarTarea(driver, 'Tarea completada');
+    await completada.findElement(By.css('.mark-completed')).click();
+
+    await driver.navigate().refresh();
+    await driver.wait(until.elementLocated(By.css('.task')), ESPERA);
+
+    const marcada = await buscarTarea(driver, 'Tarea completada');
+    const pendiente = await buscarTarea(driver, 'Tarea pendiente');
+    expect(await marcada.findElement(By.css('.mark-completed')).isSelected()).toBe(true);
+    expect(await pendiente.findElement(By.css('.mark-completed')).isSelected()).toBe(false);
   });
 });
