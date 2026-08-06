@@ -57,4 +57,13 @@ describe('HU-03 Listar tareas', function () {
     expect(await marcada.findElement(By.css('.mark-completed')).isSelected()).toBe(true);
     expect(await pendiente.findElement(By.css('.mark-completed')).isSelected()).toBe(false);
   });
+
+  it('Prueba de limites: sin tareas creadas se muestra el estado vacio y no un error', async function () {
+    await entrarAutenticado(driver);
+
+    const mensaje = await driver.wait(until.elementLocated(By.id('empty-tasks-msg')), ESPERA);
+    expect(await mensaje.isDisplayed()).toBe(true);
+    expect(await mensaje.getText()).toBe('Aún no hay tareas a realizar...');
+    expect(await contarTareas(driver)).toBe(0);
+  });
 });
