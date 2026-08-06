@@ -1,0 +1,56 @@
+const { Builder, By, until } = require('selenium-webdriver');
+const {
+  entrarAutenticado,
+  crearTarea,
+  buscarTarea,
+  escribirEnCampo,
+  titulosDeTareas,
+  tareasGuardadas,
+  capturar,
+  ESPERA
+} = require('../helpers/app');
+
+describe('HU-04 Actualizar tarea', function () {
+  let driver;
+
+  beforeAll(async function () {
+    driver = await new Builder().forBrowser('chrome').build();
+    await driver.manage().window().setRect({ width: 1280, height: 900 });
+  });
+
+  afterEach(async function () {
+    await capturar(driver, expect.getState().currentTestName);
+  });
+
+  afterAll(async function () {
+    await driver.quit();
+  });
+
+  async function abrirEdicion (titulo) {
+    const tarea = await buscarTarea(driver, titulo);
+    await tarea.findElement(By.css('.expand-task-btn')).click();
+    await tarea.findElement(By.css('.edit-task-btn')).click();
+    await driver.wait(until.elementLocated(By.id('title')), ESPERA);
+  }
+
+  it('Camino feliz: al editar y guardar el cambio se refleja en la lista y persiste', async function () {
+    await entrarAutenticado(driver);
+    await crearTarea(driver, 'Titulo original');
+
+    await abrirEdicion('Titulo original');
+    await escribirEnCampo(driver, 'title', 'Titulo editado');
+    const boton = await driver.findElement(By.id('task-submit-btn'));
+    await boton.click();
+    await driver.wait(until.stalenessOf(boton), ESPERA);
+
+    await driver.navigate().refresh();
+    await driver.wait(until.elementLocated(By.css('.task')), ESPERA);
+
+    const titulos = await titulosDeTareas(driver);
+    expect(titulos).toContain('Titulo editado');
+    expect(titulos).not.toContain('Titulo original');
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas[0].title).toBe('Titulo editado');
+  });
+});
