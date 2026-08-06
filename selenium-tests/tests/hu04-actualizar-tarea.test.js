@@ -3,6 +3,7 @@ const {
   entrarAutenticado,
   crearTarea,
   buscarTarea,
+  esperarTarea,
   escribirEnCampo,
   existeElemento,
   titulosDeTareas,
@@ -69,5 +70,25 @@ describe('HU-04 Actualizar tarea', function () {
 
     const guardadas = await tareasGuardadas(driver);
     expect(guardadas[0].title).toBe('Tarea sin cambios');
+  });
+
+  it('Prueba de limites: se puede editar hasta el largo maximo permitido sin errores', async function () {
+    const tituloLargo = 'B'.repeat(50);
+
+    await entrarAutenticado(driver);
+    await crearTarea(driver, 'Titulo corto');
+
+    await abrirEdicion('Titulo corto');
+    await escribirEnCampo(driver, 'title', tituloLargo);
+    const boton = await driver.findElement(By.id('task-submit-btn'));
+    await boton.click();
+    await driver.wait(until.stalenessOf(boton), ESPERA);
+    await esperarTarea(driver, tituloLargo);
+
+    expect(await existeElemento(driver, By.id('task-error-msg'))).toBe(false);
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas[0].title).toHaveLength(50);
+    expect(await titulosDeTareas(driver)).toContain(tituloLargo);
   });
 });
