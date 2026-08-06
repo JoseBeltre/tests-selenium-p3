@@ -61,6 +61,14 @@ async function crearTarea (driver, titulo, descripcion) {
   const boton = await driver.findElement(By.id('task-submit-btn'));
   await boton.click();
   await driver.wait(until.stalenessOf(boton), ESPERA);
+  await esperarTarea(driver, titulo);
+}
+
+async function esperarTarea (driver, titulo) {
+  await driver.wait(async function () {
+    const titulos = await titulosDeTareas(driver);
+    return titulos.includes(titulo);
+  }, ESPERA);
 }
 
 async function escribirEnCampo (driver, id, texto) {
@@ -133,6 +141,7 @@ module.exports = {
   entrarAutenticado,
   abrirModalTarea,
   crearTarea,
+  esperarTarea,
   escribirEnCampo,
   contarTareas,
   buscarTarea,
