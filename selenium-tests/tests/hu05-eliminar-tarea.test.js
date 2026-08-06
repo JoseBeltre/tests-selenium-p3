@@ -54,4 +54,20 @@ describe('HU-05 Eliminar tarea', function () {
     expect(guardadas.length).toBe(1);
     expect(guardadas[0].title).toBe('Tarea que se queda');
   });
+
+  it('Prueba negativa: al cancelar la eliminacion la tarea se mantiene', async function () {
+    await entrarAutenticado(driver);
+    await crearTarea(driver, 'Tarea protegida');
+
+    await abrirModalEliminar('Tarea protegida');
+    const boton = await driver.findElement(By.id('cancel-delete-btn'));
+    await boton.click();
+    await driver.wait(until.stalenessOf(boton), ESPERA);
+
+    expect(await contarTareas(driver)).toBe(1);
+    expect(await titulosDeTareas(driver)).toContain('Tarea protegida');
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas.length).toBe(1);
+  });
 });
