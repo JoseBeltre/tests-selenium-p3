@@ -2,6 +2,8 @@ const { Builder, By, until } = require('selenium-webdriver');
 const {
   entrarAutenticado,
   crearTarea,
+  abrirModalTarea,
+  existeElemento,
   contarTareas,
   titulosDeTareas,
   tareasGuardadas,
@@ -39,5 +41,18 @@ describe('HU-02 Crear tarea', function () {
     const guardadas = await tareasGuardadas(driver);
     expect(guardadas.length).toBe(1);
     expect(guardadas[0].title).toBe('Comprar pan');
+  });
+
+  it('Prueba negativa: con el titulo vacio no se agrega la tarea', async function () {
+    await entrarAutenticado(driver);
+    await abrirModalTarea(driver);
+    await driver.findElement(By.id('task-submit-btn')).click();
+
+    const error = await driver.wait(until.elementLocated(By.id('task-error-msg')), ESPERA);
+    expect(await error.isDisplayed()).toBe(true);
+    expect(await existeElemento(driver, By.id('title'))).toBe(true);
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas.length).toBe(0);
   });
 });
