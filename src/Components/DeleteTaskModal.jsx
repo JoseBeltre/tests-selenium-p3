@@ -13,12 +13,14 @@ export function DeleteTaskModal ({ closeModal, id }) {
       <p>¿Estás seguro que quieres eliminar esta tarea?</p>
       <div className='flex justify-end gap-2 mt-3 font-bold'>
         <button
+          id='cancel-delete-btn'
           className='text-red-400 px-7 py-2 border border-red-400 hover:bg-red-400 hover:text-white transition-colors'
           onClick={closeModal}
         >
           Cancelar
         </button>
         <button
+          id='confirm-delete-btn'
           className='text-green-500 px-7 py-2 border border-green-500 hover:bg-green-500 hover:text-white transition-colors'
           onClick={eliminarTarea}
         >

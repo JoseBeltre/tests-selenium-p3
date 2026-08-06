@@ -18,7 +18,6 @@ export class TaskModel {
 
   static getAll() {
     const tasksStorage = window.localStorage.getItem(tasksKey())
-    const tasksStorage = window.localStorage.getItem(tasksKey())
     try {
       return tasksStorage ? JSON.parse(tasksStorage) : []
     } catch (error) {
@@ -31,7 +30,6 @@ export class TaskModel {
     const tasks = TaskModel.getAll()
     tasks.push(task)
 
-    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
     window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
@@ -55,7 +53,6 @@ export class TaskModel {
     tasks.splice(index, 1)
 
     window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
-    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 
   static update({ id, updatedTask }) {
@@ -67,7 +64,6 @@ export class TaskModel {
       ...updatedTask
     }
 
-    window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
     window.localStorage.setItem(tasksKey(), JSON.stringify(tasks))
   }
 

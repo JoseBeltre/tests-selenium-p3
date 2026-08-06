@@ -6,7 +6,7 @@ export function FloatingTextarea ({ name, label, value, onChange }) {
       <textarea
         name={name}
         id={name}
-        value={value}
+        value={value ?? ''}
         onChange={onChange}
         placeholder=' '
         rows='5'

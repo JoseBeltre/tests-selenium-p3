@@ -77,6 +77,7 @@ export function RegisterForm ({ onAuthenticated }) {
 
       <button
         type='submit'
+        id='register-btn'
         disabled={isSubmitting}
         className='hover:bg-secondary hover:text-white border-2 p-2 font-bold text-lg bg-itemBg border-secondary text-secondary transition-colors disabled:opacity-50'
       >

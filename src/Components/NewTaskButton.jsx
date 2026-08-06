@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { PlusIcon } from './svg/PlusIcon'
 
-export function NewTaskButton ({ openModal, classNames }) {
+export function NewTaskButton ({ openModal, classNames, id }) {
   return (
-    <button onClick={openModal} className={' bg-itemBg p-2 pr-4 w-fit hover:bg-itemBgHover transition-colors ' + classNames}>
+    <button id={id} onClick={openModal} className={' bg-itemBg p-2 pr-4 w-fit hover:bg-itemBgHover transition-colors ' + classNames}>
       <PlusIcon size='26px' color='#fff' />
       Anadir nueva tarea
     </button>
@@ -12,5 +12,6 @@ export function NewTaskButton ({ openModal, classNames }) {
 
 NewTaskButton.propTypes = {
   openModal: PropTypes.func.isRequired,
-  classNames: PropTypes.string
+  classNames: PropTypes.string,
+  id: PropTypes.string
 }
