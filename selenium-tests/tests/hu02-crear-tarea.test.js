@@ -55,4 +55,17 @@ describe('HU-02 Crear tarea', function () {
     const guardadas = await tareasGuardadas(driver);
     expect(guardadas.length).toBe(0);
   });
+
+  it('Prueba de limites: con el titulo en el largo maximo permitido la tarea se agrega', async function () {
+    const tituloLargo = 'A'.repeat(50);
+
+    await entrarAutenticado(driver);
+    await crearTarea(driver, tituloLargo);
+
+    expect(await contarTareas(driver)).toBe(1);
+    expect(await existeElemento(driver, By.id('task-error-msg'))).toBe(false);
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas[0].title).toHaveLength(50);
+  });
 });
