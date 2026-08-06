@@ -47,4 +47,15 @@ describe('HU-01 Inicio de sesion', function () {
     expect(await error.getText()).toBe('Correo o contraseña incorrectos.');
     expect(await existeElemento(driver, By.css('h1.tasks-title'))).toBe(false);
   });
+
+  it('Prueba de limites: con los campos vacios responde con un error sin romperse', async function () {
+    await abrirApp(driver);
+    await driver.findElement(By.name('tab-login')).click();
+    await driver.findElement(By.id('login-btn')).click();
+
+    const error = await driver.wait(until.elementLocated(By.id('login-error-msg')), ESPERA);
+    expect(await error.isDisplayed()).toBe(true);
+    expect(await existeElemento(driver, By.id('login-email'))).toBe(true);
+    expect(await existeElemento(driver, By.css('h1.tasks-title'))).toBe(false);
+  });
 });
