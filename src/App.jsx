@@ -87,7 +87,7 @@ function App () {
   return (
     <>
       <header className='p-1 border-b mb-5 flex justify-between items-center gap-3 2xl:mt-10'>
-        <h1 className='text-4xl font-bold'>Lista de Tareas</h1>
+        <h1 className='tasks-title text-4xl font-bold'>Lista de Tareas</h1>
 
         <div className='flex items-center gap-3'>
           <span className='hidden sm:inline text-white/50'>Hola, {user.name}</span>

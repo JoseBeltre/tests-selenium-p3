@@ -52,11 +52,12 @@ export function LoginForm ({ onAuthenticated }) {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      {errorMsg && <span className='text-red-300'>{errorMsg}</span>}
+      {errorMsg && <span id='login-error-msg' className='text-red-300'>{errorMsg}</span>}
 
       <button
         type='submit'
         disabled={isSubmitting}
+        id='login-btn'
         className='hover:bg-secondary hover:text-white border-2 p-2 font-bold text-lg bg-itemBg border-secondary text-secondary transition-colors disabled:opacity-50'
       >
         {isSubmitting ? 'Entrando...' : 'Iniciar sesión'}
