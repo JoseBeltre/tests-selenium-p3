@@ -70,4 +70,21 @@ describe('HU-05 Eliminar tarea', function () {
     const guardadas = await tareasGuardadas(driver);
     expect(guardadas.length).toBe(1);
   });
+
+  it('Prueba de limites: al eliminar la ultima tarea queda el estado vacio sin errores', async function () {
+    await entrarAutenticado(driver);
+    await crearTarea(driver, 'Unica tarea');
+
+    await abrirModalEliminar('Unica tarea');
+    const boton = await driver.findElement(By.id('confirm-delete-btn'));
+    await boton.click();
+    await driver.wait(until.stalenessOf(boton), ESPERA);
+
+    const mensaje = await driver.wait(until.elementLocated(By.id('empty-tasks-msg')), ESPERA);
+    expect(await mensaje.isDisplayed()).toBe(true);
+    expect(await contarTareas(driver)).toBe(0);
+
+    const guardadas = await tareasGuardadas(driver);
+    expect(guardadas.length).toBe(0);
+  });
 });
