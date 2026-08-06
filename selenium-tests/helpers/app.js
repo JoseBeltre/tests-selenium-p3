@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { By, until, Key } = require('selenium-webdriver');
-const { addAttach } = require('jest-html-reporters/helper');
+const { addAttach, attachDirPath } = require('jest-html-reporters/helper');
 
 const URL_APP = 'http://localhost:5173/todo-app/';
 const ESPERA = 10000;
@@ -123,6 +123,9 @@ async function capturar (driver, nombre) {
   }
   const archivo = nombre.replace(/[^a-zA-Z0-9]+/g, '-').toLowerCase() + '.png';
   fs.writeFileSync(path.join(CARPETA_CAPTURAS, archivo), imagen, 'base64');
+  if (!fs.existsSync(attachDirPath)) {
+    fs.mkdirSync(attachDirPath, { recursive: true });
+  }
   await addAttach({
     attach: Buffer.from(imagen, 'base64'),
     description: nombre,
