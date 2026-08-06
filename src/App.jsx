@@ -92,7 +92,7 @@ function App () {
         <div className='flex items-center gap-3'>
           <span className='hidden sm:inline text-white/50'>Hola, {user.name}</span>
 
-          <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='hidden lg:flex' />
+          <NewTaskButton id='new-task-btn' openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='hidden lg:flex' />
 
           <button
             name='logout'
@@ -132,7 +132,7 @@ function App () {
             }}
           />
 
-          <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='flex lg:hidden' />
+          <NewTaskButton id='new-task-btn-mobile' openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='flex lg:hidden' />
 
         </nav>
 
@@ -165,9 +165,9 @@ function App () {
               )
             })}
           {searchQuery && filteredTasks.length === 0
-            ? <p className='text-white/50 text-center lg:pt-10'>No existe tal tarea...</p>
+            ? <p id='no-results-msg' className='text-white/50 text-center lg:pt-10'>No existe tal tarea...</p>
             : (filteredTasks.length === 0)
-                ? <p className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p>
+                ? <p id='empty-tasks-msg' className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p>
                 : ''}
         </section>
         {

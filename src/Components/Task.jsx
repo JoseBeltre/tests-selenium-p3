@@ -37,23 +37,23 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
   return (
     <article className='task bg-itemBg p-4 grid gap-2'>
       <div className='task-header flex items-start justify-between'>
-        <h3 className='text-primary text-xl font-bold leading-5 mb-1'>{title}</h3>
+        <h3 className='task-title text-primary text-xl font-bold leading-5 mb-1'>{title}</h3>
         <div className='task-buttons flex gap-2 items-center'>
           <div className='flex gap-2 items-center'>
-            <label htmlFor='mark-completed' />
+            <label htmlFor={'mark-completed-' + id} />
             <input
               type='checkbox'
-              name='mark-completed'
-              id='mark-completed'
-              className='border-2 border-white outline-none w-5 h-5 cursor-pointer'
+              name={'mark-completed-' + id}
+              id={'mark-completed-' + id}
+              className='mark-completed border-2 border-white outline-none w-5 h-5 cursor-pointer'
               defaultChecked={completed}
               onClick={toggleCompleted}
             />
           </div>
-          <button onClick={toggleStarred}>
+          <button className='star-task-btn' onClick={toggleStarred}>
             <StarIcon fill={starred} />
           </button>
-          <button onClick={openDeleteModal}>
+          <button className='delete-task-btn' onClick={openDeleteModal}>
             <TrashIcon />
           </button>
         </div>
@@ -80,7 +80,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
         expand &&
           <button
             onClick={openEditModal}
-            className='flex text-green-300 border-transparent px-1 border-b italic hover:border-green-300'
+            className='edit-task-btn flex text-green-300 border-transparent px-1 border-b italic hover:border-green-300'
           >
             <span>Editar</span>
             <EditIcon color='#86efac' size='20px' />
@@ -88,7 +88,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
         }
         <button
           onClick={() => setExpand(!expand)}
-          className='w-fit ml-auto flex items-center text-primary border-transparent px-1 border-b italic hover:border-primary'
+          className='expand-task-btn w-fit ml-auto flex items-center text-primary border-transparent px-1 border-b italic hover:border-primary'
         >
           <span className=''>
             {!expand ? 'Ampliar' : 'Ver menos'}

@@ -18,8 +18,6 @@ export function TaskModal ({ closeModal, isEditing, id }) {
     if (isEditing) {
       const task = TaskModel.get({ id })
       const { title, description, limitDate } = task
-      console.log('id desde useeffect ', id)
-      console.log('id desde useeffect ', task)
 
       setTitle(title)
       setDescription(description)
@@ -54,13 +52,21 @@ export function TaskModal ({ closeModal, isEditing, id }) {
   }
 
   const updateTask = ({ id }) => {
+    const currentTask = TaskModel.get({ id })
     const task = {
+      ...currentTask,
       title,
       description: !description ? undefined : description,
+      createdAt: new Date(currentTask.createdAt),
       limitDate: undefined
     }
     if (day && month && year) {
       task.limitDate = new Date(`${year}-${month}-${day}`)
+    }
+
+    const res = validateTask(task)
+    if (!res.success) {
+      return setErrorMsg(res.error.errors[0].message)
     }
     TaskModel.update({ id, updatedTask: task })
     closeModal()
@@ -125,9 +131,10 @@ export function TaskModal ({ closeModal, isEditing, id }) {
             />
           </div>
         </div>
-        {errorMsg && <span className='text-red-300'>{errorMsg}</span>}
+        {errorMsg && <span id='task-error-msg' className='text-red-300'>{errorMsg}</span>}
         <button
           type='submit'
+          id='task-submit-btn'
           className='hover:bg-secondary hover:text-white border-2 p-2 font-bold text-lg bg-itemBg border-secondary text-secondary transition-colors'
         >
           {isEditing ? 'Actualizar tarea' : 'Agregar nueva tarea'}
